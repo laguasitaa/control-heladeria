@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Design Tokens ────────────────────────────────────────── */
+:root {
+  /* Color — Light mode (worn/desaturated palette) */
+  --c-bg:            #F2EDE5;
+  --c-surface:       #FAF7F2;
+  --c-surface-warm:  #F5EFE5;
+  --c-text:          #241C0E;
+  --c-text-muted:    #8A7868;
+  --c-text-placeholder: #B8AD9E;
+  --c-accent:        #7A5A1E;
+  --c-accent-light:  #EDE3D0;
+  --c-accent-hover:  #644A18;
+  --c-success:       #4A7060;
+  --c-success-light: #D4E8E0;
+  --c-warning:       #9A7820;
+  --c-warning-light: #F0E6C0;
+  --c-danger:        #9C3535;
+  --c-danger-light:  #F0D8D8;
+  --c-border:        #DDD5C8;
+  --c-border-subtle: #EAE3DA;
+
+  /* Typography */
+  --font-display: 'Cabinet Grotesk', sans-serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+
+  --fs-xs:   11px;
+  --fs-sm:   13px;
+  --fs-base: 15px;
+  --fs-md:   18px;
+  --fs-lg:   22px;
+  --fs-xl:   28px;
+  --fs-2xl:  40px;
+
+  /* Spacing (base 4px) */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* Border radius */
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   16px;
+  --r-full: 9999px;
+
+  /* Motion */
+  --dur-micro:  80ms;
+  --dur-short:  160ms;
+  --dur-medium: 280ms;
+  --dur-long:   480ms;
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit:  cubic-bezier(0.4, 0, 1, 1);
+  --ease-move:  cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Dark mode tokens ─────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg:            #18140F;
+    --c-surface:       #221D15;
+    --c-surface-warm:  #28220E;
+    --c-text:          #F0E8DC;
+    --c-text-muted:    #9E8E78;
+    --c-text-placeholder: #6A5E50;
+    --c-accent:        #A8804A;
+    --c-accent-light:  #2A2010;
+    --c-accent-hover:  #C09A60;
+    --c-success:       #5A8878;
+    --c-success-light: #182820;
+    --c-warning:       #B09040;
+    --c-warning-light: #28220A;
+    --c-danger:        #B05050;
+    --c-danger-light:  #2A1515;
+    --c-border:        #30281C;
+    --c-border-subtle: #261E14;
+  }
+}
+
+/* ── Base reset ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--font-body);
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body { margin: 0; }
+
+/* ── Tailwind v4 theme extension ─────────────────────────── */
+@theme {
+  --color-bg:            var(--c-bg);
+  --color-surface:       var(--c-surface);
+  --color-surface-warm:  var(--c-surface-warm);
+  --color-text:          var(--c-text);
+  --color-text-muted:    var(--c-text-muted);
+  --color-accent:        var(--c-accent);
+  --color-accent-light:  var(--c-accent-light);
+  --color-success:       var(--c-success);
+  --color-success-light: var(--c-success-light);
+  --color-warning:       var(--c-warning);
+  --color-warning-light: var(--c-warning-light);
+  --color-danger:        var(--c-danger);
+  --color-danger-light:  var(--c-danger-light);
+  --color-border:        var(--c-border);
+  --color-border-subtle: var(--c-border-subtle);
+
+  --font-family-display: var(--font-display);
+  --font-family-body:    var(--font-body);
+
+  --border-radius-sm:   var(--r-sm);
+  --border-radius-md:   var(--r-md);
+  --border-radius-lg:   var(--r-lg);
+  --border-radius-full: var(--r-full);
+}
+
+/* ── Utility classes ──────────────────────────────────────── */
+
+/* Typography */
+@utility font-display { font-family: var(--font-display); }
+@utility font-body    { font-family: var(--font-body); }
+@utility tabular-nums { font-variant-numeric: tabular-nums; }
+
+/* Focus ring — always visible for keyboard users */
+@utility focus-ring {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+/* Currency amount formatting */
+@utility amount {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+/* Section label */
+@utility section-label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+}
+
+/* ── Focus visible (keyboard nav) ────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ── Scrollbar (warm, minimal) ───────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--c-border);
+  border-radius: var(--r-full);
+}
