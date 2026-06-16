@@ -1,22 +1,66 @@
 # control-heladeria
 
 ## La idea
-Panel de control para heladería que centraliza gastos, ventas, inventario, contratos, rentas y empleados ordenados por actualización más reciente
+Dashboard-first panel de control para heladería de yoghurt griego en Los Cabos. La pantalla de inicio muestra en 30 segundos cómo va el mes (ventas vs gastos) y qué vencimientos están próximos. Los formularios de captura son secundarios al resumen.
 
 ## Para quién
-Dueña de heladería de yoghurt griego en Los Cabos
+2 usuarios con acceso completo igual: la dueña y una persona de confianza. Login por email + contraseña. Sign-up cerrado (cuentas creadas manualmente en Supabase).
 
 ## Cómo lo hacen hoy (status quo)
-Excel o Google Sheets separados por tema
+Excel o Google Sheets separados: uno para gastos, otro para rentas/contratos, otro para ventas. Cada uno en archivo distinto.
 
 ## Qué duele del proceso (pain point superficial)
-Se desorganiza rápido y la info queda dispersa en varios archivos
+Info dispersa, difícil de consultar rápido en el celular.
 
-## Qué cuesta eso al usuario (pain impact — la causa raíz, lo que importa al final)
-Toma más tiempo gestionarlo y es difícil tener visibilidad completa del negocio en un solo lugar
+## Qué cuesta eso al usuario (pain impact — la causa raíz)
+No saber en 30 segundos cómo va el mes. Olvidar vencimientos de renta o contrato — eso tiene costo real.
 
-## MVP (punto de partida)
-Registro y listado de gastos ordenados por fecha de actualización, con categorías básicas (renta, empleados, inventario, etc.) y notificacion de vencimientos para rentas y inventarios.
+## MVP — Phase 1 (lo que construimos ahora)
+- Auth: login email + contraseña, sign-up cerrado, middleware de protección
+- Dashboard: total ventas vs gastos del mes, top 3 categorías, alertas de vencimientos próximos
+- Gastos: lista del mes + filtros por categoría + CRUD (crear/editar/eliminar) vía bottom sheet
+- Ventas: lista del mes + CRUD
+
+## MVP — Phase 2 (siguiente iteración)
+- Vencimientos: lista completa + semáforo verde/amarillo/rojo
+- PWA manifest (instalable en celular desde pantalla de inicio)
+
+## Fuera de scope (decisión consciente)
+- Módulo de empleados
+- Gráficos de tendencia (necesitan 2-3 meses de datos)
+- Export CSV
+- Email/push notifications
+- Roles distintos entre los 2 usuarios
+
+## Stack técnico
+- Next.js App Router + Server Components + Server Actions (no API routes)
+- Supabase SSR (Auth + RLS + Postgres)
+- Tailwind v4 + tokens en globals.css (leer DESIGN.md antes de cualquier UI)
+- Deploy: Vercel (CI/CD auto en push a main — después de primer deploy)
+
+## Arquitectura RLS (CRÍTICO — leer antes de tocar SQL)
+Las 2 usuarias comparten los mismos datos (una sola heladería). La política estándar `auth.uid() = user_id` NO funciona aquí — solo mostraría datos de cada una por separado.
+
+Modelo correcto: tabla `heladeria` (la org) + `heladeria_miembros` (vincula users con la org). RLS policy para todas las tablas de datos:
+```sql
+USING (heladeria_id IN (SELECT heladeria_id FROM heladeria_miembros WHERE user_id = auth.uid()))
+WITH CHECK (heladeria_id IN (SELECT heladeria_id FROM heladeria_miembros WHERE user_id = auth.uid()))
+```
+
+La `heladeria_miembros` también tiene su propia policy: `USING (user_id = auth.uid())`.
+
+## Gap crítico conocido — Dashboard Promise.all
+El dashboard corre 4 queries en paralelo con `Promise.all`. Si una falla sin try/catch, toda la pantalla queda en blanco. Hay que envolver en try/catch con estado de error parcial.
+
+## Diseño visual
+- Sistema: Warm Utilitarian — ocre desgastado, lino envejecido, sin decoración.
+- Design system completo en `DESIGN.md` (fuente de verdad para colores, fuentes, spacing).
+- Tokens en `app/globals.css`. Nunca hex hardcodeados en componentes.
+- Mobile-first. Bottom sheet (no modal) para formularios — el teclado no tapa el sheet.
+- Navegación: bottom tab bar mobile (<768px), sidebar desktop (≥768px).
+
+## Guarda información
+Sí — Supabase (Postgres + Auth + RLS)
 
 ## Guarda información
 Sí — usamos Supabase
