@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation'
 import { signOut } from '@/app/actions/auth'
 
 const NAV = [
-  { href: '/dashboard', label: 'Inicio',     icon: '📊' },
-  { href: '/gastos',    label: 'Gastos',     icon: '📋' },
-  { href: '/ventas',    label: 'Ventas',     icon: '💰' },
+  { href: '/dashboard',  label: 'Inicio',      icon: '📊' },
+  { href: '/gastos',     label: 'Gastos',      icon: '📋' },
+  { href: '/ventas',     label: 'Ventas',      icon: '💰' },
+  { href: '/documentos', label: 'Documentos',  icon: '📁' },
 ]
 
 export function BottomNav() {
