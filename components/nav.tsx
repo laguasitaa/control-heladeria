@@ -18,7 +18,12 @@ export function BottomNav() {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-40 flex border-t"
-      style={{ background: 'var(--c-surface)', borderColor: 'var(--c-border)', height: 60 }}
+      style={{
+        background: 'var(--c-surface)',
+        borderColor: 'var(--c-border)',
+        height: 'calc(60px + env(safe-area-inset-bottom))',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
     >
       {NAV.map(item => {
         const active = path.startsWith(item.href)
