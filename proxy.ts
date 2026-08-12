@@ -29,12 +29,8 @@ export async function proxy(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
 
     const isLoginPage = request.nextUrl.pathname.startsWith('/login')
-    // El link de recuperación de contraseña llega con la sesión en el fragmento (#...)
-    // de la URL, que el servidor nunca ve — solo el navegador la puede leer. Por eso
-    // esta ruta no puede exigir sesión aquí; el cliente la establece al cargar.
-    const isResetPasswordPage = request.nextUrl.pathname.startsWith('/reset-password')
 
-    if (!user && !isLoginPage && !isResetPasswordPage) {
+    if (!user && !isLoginPage) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
@@ -43,7 +39,7 @@ export async function proxy(request: NextRequest) {
     }
   } catch {
     // Error de conexión — redirige a login para que el usuario pueda reintentar
-    if (!request.nextUrl.pathname.startsWith('/login') && !request.nextUrl.pathname.startsWith('/reset-password')) {
+    if (!request.nextUrl.pathname.startsWith('/login')) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
   }
