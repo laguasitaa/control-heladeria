@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { crearVenta, editarVenta, eliminarVenta } from '@/app/actions/ventas'
+import { useViewportHeight } from '@/lib/hooks/use-viewport-height'
 
 const MXN = new Intl.NumberFormat('es-MX', {
   style: 'currency', currency: 'MXN', maximumFractionDigits: 0
@@ -20,6 +21,7 @@ export default function VentasClient({ ventas }: { ventas: Venta[] }) {
   const [sheet, setSheet] = useState<Sheet>(null)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const vh = useViewportHeight()
 
   const total = ventas.reduce((s, v) => s + Number(v.monto_total), 0)
   const hoy = new Date().toISOString().split('T')[0]
@@ -117,11 +119,11 @@ export default function VentasClient({ ventas }: { ventas: Venta[] }) {
 
       {/* Bottom sheet */}
       {sheet && (
-        <div className="fixed inset-0 z-40 flex items-end"
-          style={{ background: 'rgba(28,20,9,0.4)' }}
+        <div className="fixed inset-x-0 bottom-0 z-40 flex items-end"
+          style={{ top: 0, height: vh ?? '100vh', background: 'rgba(28,20,9,0.4)' }}
           onClick={e => { if (e.target === e.currentTarget) closeSheet() }}>
           <div className="w-full rounded-t-3xl p-6"
-            style={{ background: 'var(--c-surface)', maxHeight: '90vh', overflowY: 'auto' }}
+            style={{ background: 'var(--c-surface)', maxHeight: vh ? vh * 0.92 : '92vh', overflowY: 'auto' }}
             onClick={e => e.stopPropagation()}>
             <div className="w-9 h-1 rounded-full mx-auto mb-5" style={{ background: 'var(--c-border)' }} />
             <h2 className="text-lg font-bold mb-5"

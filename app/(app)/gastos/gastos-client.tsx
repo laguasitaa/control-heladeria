@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { crearGasto, editarGasto, eliminarGasto } from '@/app/actions/gastos'
+import { useViewportHeight } from '@/lib/hooks/use-viewport-height'
 
 const MXN = new Intl.NumberFormat('es-MX', {
   style: 'currency', currency: 'MXN', maximumFractionDigits: 0
@@ -24,6 +25,7 @@ export default function GastosClient({ gastos }: { gastos: Gasto[] }) {
   const [filtro, setFiltro] = useState('todos')
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const vh = useViewportHeight()
 
   const filtrados = filtro === 'todos' ? gastos : gastos.filter(g => g.categoria === filtro)
 
@@ -136,12 +138,12 @@ export default function GastosClient({ gastos }: { gastos: Gasto[] }) {
       {/* Bottom sheet backdrop */}
       {sheet && (
         <div
-          className="fixed inset-0 z-40 flex items-end"
-          style={{ background: 'rgba(28,20,9,0.4)' }}
+          className="fixed inset-x-0 bottom-0 z-40 flex items-end"
+          style={{ top: 0, height: vh ?? '100vh', background: 'rgba(28,20,9,0.4)' }}
           onClick={e => { if (e.target === e.currentTarget) closeSheet() }}>
           <div
             className="w-full rounded-t-3xl p-6"
-            style={{ background: 'var(--c-surface)', maxHeight: '90vh', overflowY: 'auto' }}
+            style={{ background: 'var(--c-surface)', maxHeight: vh ? vh * 0.92 : '92vh', overflowY: 'auto' }}
             onClick={e => e.stopPropagation()}>
 
             {/* Handle */}

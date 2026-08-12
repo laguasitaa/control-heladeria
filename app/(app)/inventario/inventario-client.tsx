@@ -5,6 +5,7 @@ import {
   crearProducto, editarProducto, eliminarProducto,
   guardarStockInicial, registrarConsumo, eliminarConsumo
 } from '@/app/actions/inventario'
+import { useViewportHeight } from '@/lib/hooks/use-viewport-height'
 
 const CATEGORIAS = ['lácteos', 'frutas', 'endulzantes', 'envases', 'insumos', 'otros']
 const UNIDADES = ['kg', 'g', 'L', 'mL', 'piezas', 'bolsas', 'cajas', 'latas']
@@ -47,6 +48,7 @@ export default function InventarioClient({
   const [filtro, setFiltro] = useState('todos')
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const vh = useViewportHeight()
 
   const hoy = new Date().toISOString().split('T')[0]
 
@@ -263,11 +265,11 @@ export default function InventarioClient({
 
       {/* ── Bottom Sheet ──────────────────────────────────────────────────── */}
       {sheet && (
-        <div className="fixed inset-0 z-40 flex items-end"
-          style={{ background: 'rgba(28,20,9,0.4)' }}
+        <div className="fixed inset-x-0 bottom-0 z-40 flex items-end"
+          style={{ top: 0, height: vh ?? '100vh', background: 'rgba(28,20,9,0.4)' }}
           onClick={e => { if (e.target === e.currentTarget) closeSheet() }}>
           <div className="w-full rounded-t-3xl p-6"
-            style={{ background: 'var(--c-surface)', maxHeight: '92vh', overflowY: 'auto' }}
+            style={{ background: 'var(--c-surface)', maxHeight: vh ? vh * 0.92 : '92vh', overflowY: 'auto' }}
             onClick={e => e.stopPropagation()}>
             <div className="w-9 h-1 rounded-full mx-auto mb-5" style={{ background: 'var(--c-border)' }} />
 
