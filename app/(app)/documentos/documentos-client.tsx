@@ -196,11 +196,11 @@ export default function DocumentosClient({ documentos }: { documentos: Documento
 
       {/* Bottom sheet */}
       {sheet && (
-        <div className="fixed inset-x-0 bottom-0 z-40 flex items-end"
+        <div className="fixed inset-x-0 bottom-0 z-50 flex items-end"
           style={{ top: 0, height: vh ?? '100vh', background: 'rgba(28,20,9,0.4)' }}
           onClick={e => { if (e.target === e.currentTarget) closeSheet() }}>
           <div className="w-full rounded-t-3xl p-6"
-            style={{ background: 'var(--c-surface)', maxHeight: vh ? vh * 0.92 : '92vh', overflowY: 'auto' }}
+            style={{ background: 'var(--c-surface)', maxHeight: vh ? vh * 0.92 : '92vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}
             onClick={e => e.stopPropagation()}>
             <div className="w-9 h-1 rounded-full mx-auto mb-5" style={{ background: 'var(--c-border)' }} />
             <h2 className="text-lg font-bold mb-5"
